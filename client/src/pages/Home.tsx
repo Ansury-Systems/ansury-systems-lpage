@@ -137,15 +137,44 @@ export default function Home() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeService, setActiveService] = useState("revenue");
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
-  const [formStatus, setFormStatus] = useState<"idle" | "submitted">("idle");
+  const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "submitted">("idle");
 
   const selectedService = services.find((service) => service.id === activeService) ?? services[0];
   const SelectedIcon = selectedService.icon;
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormStatus("submitted");
-    toast.success("Signal received. We’ll be in touch shortly.");
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    setFormStatus("submitting");
+
+    const params = new URLSearchParams(window.location.search);
+    const payload = {
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+      website: String(formData.get("website") ?? ""),
+      source_page: window.location.pathname,
+      utm_source: params.get("utm_source") ?? undefined,
+      utm_medium: params.get("utm_medium") ?? undefined,
+      utm_campaign: params.get("utm_campaign") ?? undefined,
+      utm_content: params.get("utm_content") ?? undefined,
+      utm_term: params.get("utm_term") ?? undefined,
+    };
+
+    try {
+      const response = await fetch("https://btwlytxbrguovuxtvbnl.supabase.co/functions/v1/ansury-lead-intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error("Lead intake failed");
+      setFormStatus("submitted");
+      toast.success("Signal received. We’ll be in touch shortly.");
+    } catch {
+      setFormStatus("idle");
+      toast.error("We couldn’t send that note. Please try again.");
+    }
   };
 
   return (
@@ -432,7 +461,8 @@ export default function Home() {
                     <label>What’s your name?<input required name="name" placeholder="Alex Morgan" /></label>
                     <label>Where should we reply?<input required type="email" name="email" placeholder="alex@company.com" /></label>
                     <label>What are you trying to unlock?<textarea required name="message" rows={3} placeholder="We’re spending too much time on…" /></label>
-                    <button className="button button-accent button-submit" type="submit">Start the conversation <ArrowUpRight size={17} /></button>
+                    <label className="sr-only">Leave this field empty<input tabIndex={-1} autoComplete="off" name="website" /></label>
+                    <button className="button button-accent button-submit" type="submit" disabled={formStatus === "submitting"}>{formStatus === "submitting" ? "Sending signal…" : "Start the conversation"} {formStatus !== "submitting" && <ArrowUpRight size={17} />}</button>
                     <p className="form-footnote">By sending this form, you’re opening a conversation—not signing up for a newsletter.</p>
                   </>
                 )}
