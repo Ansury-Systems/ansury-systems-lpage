@@ -163,7 +163,8 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch("https://btwlytxbrguovuxtvbnl.supabase.co/functions/v1/ansury-lead-intake", {
+      const intakeEndpoint = import.meta.env.VITE_SUPABASE_LEAD_INTAKE_URL ?? "https://btwlytxbrguovuxtvbnl.supabase.co/functions/v1/ansury-lead-intake";
+      const response = await fetch(intakeEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
