@@ -1,0 +1,15 @@
+{
+  "name": "Ansury Systems",
+  "short_name": "Ansury",
+  "description": "AI-powered operating systems for ambitious teams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0c11",
+  "theme_color": "#0b0c11",
+  "icons": [{
+    "src": "/favicon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any maskable"
+  }]
+}

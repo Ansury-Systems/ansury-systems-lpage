@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title>Ansury Systems</title>
+  <desc>Ansury Systems lime A mark on a dark background</desc>
+  <rect width="64" height="64" rx="14" fill="#0b0c11"/>
+  <path d="M16 48 28 16h8l12 32h-8l-2.8-8H26.8L24 48h-8Zm13.4-14h5.2L32 26.5 29.4 34Z" fill="#c7ff4f"/>
+  <path d="M23 45h18" stroke="#e9f0e0" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+</svg>
